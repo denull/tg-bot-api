@@ -1,6 +1,7 @@
-const { basename } = require('path');
-const { Readable } = require('stream');
-const { isTypedArray } = require('util/types');
+const { basename } = require('node:path');
+const { Readable } = require('node:stream');
+const { Blob, File } = require('node:buffer');
+const { isTypedArray } = require('node:util/types');
 
 function streamToFile(stream, name, type) {
   return new Promise((resolve, reject) => {
@@ -36,7 +37,7 @@ class TelegramBotAPI {
     for (let k in params) {
       // Node now has way too many file-like data structures
       if (params[k] instanceof Buffer || params[k] instanceof ArrayBuffer || isTypedArray(params[k]) || params[k] instanceof DataView ||
-        params[k] instanceof Blob || params[k] instanceof File || params[k] instanceof Readable) {
+        params[k] instanceof Readable || params[k] instanceof Blob || params[k] instanceof File) {
         formData = new FormData();
       }
     }

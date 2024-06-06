@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/deNULL/tg-bot-api/issues"
   },
-  "homepage": "https://github.com/deNULL/tg-bot-api#readme"
+  "homepage": "https://github.com/deNULL/tg-bot-api#readme",
+  "engines" : { 
+    "node" : ">=18.0.0"
+  }
 }
