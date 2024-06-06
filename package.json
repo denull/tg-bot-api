@@ -1,0 +1,26 @@
+{
+  "name": "tg-bot-api",
+  "version": "1.0.0",
+  "description": "A tiny, unopinionated, 0-dependency library for interacting with Telegram Bot API",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deNULL/tg-bot-api.git"
+  },
+  "keywords": [
+    "Telegram",
+    "bot",
+    "API",
+    "tg",
+    "BotAPI"
+  ],
+  "author": "Denis Olshin (me@denull.ru)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/deNULL/tg-bot-api/issues"
+  },
+  "homepage": "https://github.com/deNULL/tg-bot-api#readme"
+}
