@@ -74,7 +74,9 @@ class TelegramBotAPI {
       method: 'post',
       body: formData || JSON.stringify(params),
       ...(!formData && {
-        'Content-Type': 'application/json',
+        headers: {
+          'Content-Type': 'application/json',
+        }
       })
     });
 
