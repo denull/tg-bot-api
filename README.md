@@ -1,10 +1,10 @@
 # tg-bot-api
 
-Лаконичная библиотека для [Telegram Bot API](https://core.telegram.org/bots/api). В отличие от большинства других библиотек, эта реализация не перегружена лишними деталями и решает только одну задачу: удобное выполнение запросов к API. У библиотеки нет внешних зависимостей, она состоит из 1 файла длиной менее 100 строк и не требует обновлений при появлении новых методов.
+This is a concise library for [Telegram Bot API](https://core.telegram.org/bots/api). Unlike most other libraries, this implementation is not overloaded with unnecessary details and solves only one problem: convenient execution of requests to the API. The library has no external dependencies, it consists of 1 file less than 100 lines long and does not require updates when new methods appear.
 
-Это **не** фреймворк. Библиотека не предлагает способов обрабатки входящих событий: это тривиально решается любым веб-фреймворком (например, [Express](https://expressjs.com/)). Для вызова методов вам не нужно сверяться с документацией библиотеки: вы всегда передаёте объект с теми полями, которые указаны в официальной документации самого [Telegram Bot API](https://core.telegram.org/bots/api).
+This is **not** a framework. The library does not offer ways to handle incoming events: this can be trivially solved by any web framework (for example, [Express](https://expressjs.com/)). To call methods, you do not need to consult the library documentation: you always pass an object with the fields that are specified in the official documentation of the [Telegram Bot API](https://core.telegram.org/bots/api).
 
-## Установка
+## Installation
 
 ```
 npm install tg-bot-api
@@ -12,97 +12,97 @@ npm install tg-bot-api
 
 ## TelegramBotAPI
 
-Библиотека экспортирует класс `TelegramBotAPI`. Для работы с API создайте его экземпляр, передав токен вашего бота:
+The library exports the `TelegramBotAPI` class. To work with the API, create an instance of it by passing your bot's token:
 
 ```js
 const TelegramBotAPI = require('tg-bot-api');
 
-// Замените HERE_GOES_YOUR_TOKEN на токен, полученный от @BotFather
+// Replace HERE_GOES_YOUR_TOKEN with the token received from @BotFather
 const bot = new TelegramBotAPI('HERE_GOES_YOUR_TOKEN');
 ```
 
-Если вам нужно проксировать запросы, вы можете поменять эндпоинт, передав его в конструктор вторым параметром:
+If you need to proxy requests, you can change the endpoint by passing it to the constructor as the second parameter:
 ```js
 const bot = new TelegramBotAPI('HERE_GOES_YOUR_TOKEN', 'https://bots.mn/bot{token}/{method}');
 ```
 
-Используйте шаблоны `{token}` и `{method}` внутри URL для подстановки в него токена и имени вызываемого метода. По умолчанию используется эндпоинт `https://api.telegram.org/bot{token}/{method}`.
+Use the `{token}` and `{method}` templates inside a URL to substitute the token and name of the method being called. The default endpoint is `https://api.telegram.org/bot{token}/{method}`.
 
-## Выполнение запросов к API
+## Making API requests
 
-Чтобы вызывать методы API, просто вызывайте их на созданном экземпляре `TelegramBotAPI`. Все параметры указываются в виде полей объекта, переданного первым аргументом. Методы возвращают `Promise`, который либо резолвится содержимым поля `result` из ответа API (если вызов завершился успешно), либо выбрасывают возвращённую от API ошибку (с полями `error_code` и `description`). Список методов, их параметров и кодов ошибок смотрите в [официальной документации](https://core.telegram.org/bots/api).
+To call API methods, simply call them on the created `TelegramBotAPI` instance. All parameters are specified as fields of the object passed as the first argument. The methods return a `Promise`, which is either resolved by the contents of the `result` field from the API response (if the call was successful), or throws the error returned from the API (with the `error_code` and `description` fields). For a list of methods, their parameters and error codes, see the [official documentation](https://core.telegram.org/bots/api).
 
 ```js
 const TelegramBotAPI = require('tg-bot-api');
 const bot = new TelegramBotAPI('HERE_GOES_YOUR_TOKEN');
 
-(async () => {
-  try {
-    console.log(await bot.sendMessage({
-      chat_id: 888352,
-      text: 'Thanks for the library!',
-    }));
-  } catch (error) {
-    console.error('Oh no', error);
-  }
+(async() => {
+ try {
+ console.log(await bot.sendMessage({
+ chat_id: 888352,
+ text: 'Thanks for the library!',
+ }));
+ } catch (error) {
+ console.error('Oh no', error);
+ }
 })();
 ```
 
-Единственная ошибка, которая обрабатывается самой библиотекой автоматически, это флуд-контроль. Если в ответе сервера присутствует поле `retry_after`, метод не выбросит ошибку, а автоматически повторит запрос спустя указанное время. Чтобы отключить это поведение, передайте `false` вторым аргументом в вызываемый метод.
+The only error that is handled automatically by the library itself is flood control. If the server response contains the `retry_after` field, the method will not throw an error, but will automatically repeat the request after the specified time. To disable this behavior, pass `false` as the second argument to the method being called.
 
-Обратите внимание: в библиотеке нет «вшитого» списка методов; вы можете попытаться вызвать в том числе несуществующие методы API (которые вероятно вернут соответствующую ошибку).
+Please note: the library does not have a built-in list of methods; you can try to call non-existent API methods (which will probably return an error).
 
-## Отправка файлов
+## Sending files
 
-Основной нюанс, который возникает при работе с Telegram Bot API, это особенности отправки файлов. Библиотека автоматически переключается с формата `application/json` на `multipart/form-data`, если одно из переданных полей имеет тип `Blob`, `File`, `Stream`, `Buffer`, `ArrayBuffer`, `TypedArray` или `DataView`:
+The main nuance that arises when working with the Telegram Bot API is the features of sending files. The library automatically switches from `application/json` format to `multipart/form-data` if one of the fields passed is of type `Blob`, `File`, `Stream`, `Buffer`, `ArrayBuffer`, `TypedArray` or `DataView`:
 
 ```js
 const fs = require('fs');
 const TelegramBotAPI = require('tg-bot-api');
 const bot = new TelegramBotAPI('HERE_GOES_YOUR_TOKEN');
 
-(async () => {
-  const stream = fs.createReadStream('./image1.jpg');
-  const message = await bot.sendPhoto({
-    chat_id: 888352,
-    photo: stream,
-  });
+(async() => {
+ const stream = fs.createReadStream('./image1.jpg');
+ const message = await bot.sendPhoto({
+ chat_id: 888352,
+ photo: stream,
+ });
 
-  const buffer = fs.readFileSync('./image2.jpg');
-  bot.editMessageMedia({
-    chat_id: 888352,
-    message_id: message.message_id,
-    media: {
-      type: 'photo',
+ const buffer = fs.readFileSync('./image2.jpg');
+ bot.editMessageMedia({
+ chat_id: 888352,
+ message_id: message.message_id,
+ media: {
+ type: 'photo',
 
-      // Здесь, в соответствии с документацией метода, `image` - имя поля (любое на ваше усмотрение), в котором передано тело файла
-      media: 'attach://image',
-    },
-    // Собственно тело файла, на которое ссылается `media` - должно быть на верхнем уровне наравне с другими параметрами
-    image: new File([buffer], 'AnotherImage.jpg', { type: 'image/jpeg' }), // Можно также указать просто `buffer`
-  });
+ // Here, in accordance with the method documentation, `image` is the name of the field (any at your discretion) in which the file body is passed
+ media: 'attach://image',
+ },
+ // The actual body of the file referred to by `media` should be at the top level along with other parameters
+ image: new File([buffer], 'AnotherImage.jpg', { type: 'image/jpeg' }), // You can also just specify `buffer`
+ });
 })();
 ```
 
-Для загрузки фотографий как правило не требуется заботиться о правильном указании имени загружаемого файла и его MIME-типе. Но, например, при загрузке документов это может быть важно (имя файла будет отображаться в интерфейсе мессенджера).
+To upload photos, as a rule, you do not need to worry about correctly specifying the name of the uploaded file and its MIME type. But, for example, when downloading documents, this may be important (the file name will be displayed in the messenger interface).
 
-Указать эти значения можно несколькими способами. Самый «каноничный» — создать экземпляр нативного класса [File](https://developer.mozilla.org/en-US/docs/Web/API/File/File), в конструкторе которого можно передать эти поля:
+There are several ways to specify these values. The most “canonical” is to create an instance of the native class [File](https://developer.mozilla.org/en-US/docs/Web/API/File/File), in whose constructor you can pass these fields:
 
 ```js
 const file = new File([buffer], 'AnotherImage.jpg', { type: 'image/jpeg' });
 ```
 
-Второй способ — указать эти значения в полях `name` и `type` непосредственно на загружаемом объекте. Кроме того, если вы класс `Stream` содержит поле `path`, имя файла будет извлечено из пути к нему.
+The second way is to specify these values ​​in the `name` and `type` fields directly on the loaded object. Additionally, if your `Stream` class contains a `path` field, the filename will be extracted from its path.
 
-Наконец, можно определить эти значения «рядом» с загружаемым файлом следующим образом:
+Finally, you can define these values ​​"next to" the downloaded file like this:
 
 ```js
 const message = await bot.sendDocument({
-  chat_id: 888352,
-  document: fs.createReadStream('./README.md'),
-  document$name: 'VeryImportantDocument.md',
-  document$type: 'text/markdown',
+ chat_id: 888352,
+ document: fs.createReadStream('./README.md'),
+ document$name: 'VeryImportantDocument.md',
+ document$type: 'text/markdown',
 });
 ```
 
-Имя полей с этой мета-информацией образуются из имени поля с самим файлом путем дописывания суффиксов `$name` и `$type`.
+The names of the fields with this meta information are formed from the name of the field with the file itself by adding the suffixes `$name` and `$type`.
