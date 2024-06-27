@@ -1,5 +1,7 @@
 # tg-bot-api
 
+**English** | [Russian](README-ru.md)
+
 This is a concise library for [Telegram Bot API](https://core.telegram.org/bots/api). Unlike most other libraries, this implementation is not overloaded with unnecessary details and solves only one problem: convenient execution of requests to the API. The library has no external dependencies, it consists of 1 file less than 100 lines long and does not require updates when new methods appear.
 
 This is **not** a framework. The library does not offer ways to handle incoming events: this can be trivially solved by any web framework (for example, [Express](https://expressjs.com/)). To call methods, you do not need to consult the library documentation: you always pass an object with the fields that are specified in the official documentation of the [Telegram Bot API](https://core.telegram.org/bots/api).
