@@ -39,14 +39,14 @@ const TelegramBotAPI = require('tg-bot-api');
 const bot = new TelegramBotAPI('HERE_GOES_YOUR_TOKEN');
 
 (async() => {
- try {
- console.log(await bot.sendMessage({
- chat_id: 888352,
- text: 'Thanks for the library!',
- }));
- } catch (error) {
- console.error('Oh no', error);
- }
+  try {
+    console.log(await bot.sendMessage({
+      chat_id: 888352,
+      text: 'Thanks for the library!',
+    }));
+  } catch (error) {
+    console.error('Oh no', error);
+  }
 })();
 ```
 
@@ -64,25 +64,25 @@ const TelegramBotAPI = require('tg-bot-api');
 const bot = new TelegramBotAPI('HERE_GOES_YOUR_TOKEN');
 
 (async() => {
- const stream = fs.createReadStream('./image1.jpg');
- const message = await bot.sendPhoto({
- chat_id: 888352,
- photo: stream,
- });
+  const stream = fs.createReadStream('./image1.jpg');
+  const message = await bot.sendPhoto({
+    chat_id: 888352,
+    photo: stream,
+  });
 
- const buffer = fs.readFileSync('./image2.jpg');
- bot.editMessageMedia({
- chat_id: 888352,
- message_id: message.message_id,
- media: {
- type: 'photo',
+const buffer = fs.readFileSync('./image2.jpg');
+  bot.editMessageMedia({
+    chat_id: 888352,
+    message_id: message.message_id,
+    media: {
+      type: 'photo',
 
- // Here, in accordance with the method documentation, `image` is the name of the field (any at your discretion) in which the file body is passed
- media: 'attach://image',
- },
- // The actual body of the file referred to by `media` should be at the top level along with other parameters
- image: new File([buffer], 'AnotherImage.jpg', { type: 'image/jpeg' }), // You can also just specify `buffer`
- });
+      // Here, in accordance with the method documentation, `image` is the name of the field (any at your discretion) in which the file body is passed
+      media: 'attach://image',
+    },
+    // The actual body of the file referred to by `media` should be at the top level along with other parameters
+    image: new File([buffer], 'AnotherImage.jpg', { type: 'image/jpeg' }), // You can also just specify `buffer`
+  });
 })();
 ```
 
@@ -100,10 +100,10 @@ Finally, you can define these values ​​"next to" the downloaded file like th
 
 ```js
 const message = await bot.sendDocument({
- chat_id: 888352,
- document: fs.createReadStream('./README.md'),
- document$name: 'VeryImportantDocument.md',
- document$type: 'text/markdown',
+  chat_id: 888352,
+  document: fs.createReadStream('./README.md'),
+  document$name: 'VeryImportantDocument.md',
+  document$type: 'text/markdown',
 });
 ```
 
