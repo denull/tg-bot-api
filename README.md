@@ -86,9 +86,9 @@ const buffer = fs.readFileSync('./image2.jpg');
 })();
 ```
 
-To upload photos, as a rule, you do not need to worry about correctly specifying the name of the uploaded file and its MIME type. But, for example, when downloading documents, this may be important (the file name will be displayed in the messenger interface).
+To upload photos, as a rule, you do not need to worry about correctly specifying the name of the uploaded file and its MIME type. But, for example, when uploading documents, this may be important (the file name will be displayed in the messenger interface).
 
-There are several ways to specify these values. The most “canonical” is to create an instance of the native class [File](https://developer.mozilla.org/en-US/docs/Web/API/File/File), in whose constructor you can pass these fields:
+There are several ways to specify these values. The most “canonical” way is to create an instance of the native class [File](https://developer.mozilla.org/en-US/docs/Web/API/File/File), in whose constructor you can pass these fields:
 
 ```js
 const file = new File([buffer], 'AnotherImage.jpg', { type: 'image/jpeg' });
