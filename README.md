@@ -7,7 +7,7 @@
 ## Установка
 
 ```
-npm install tg-bot-api
+npm install @denull/tg-bot-api
 ```
 
 ## TelegramBotAPI
