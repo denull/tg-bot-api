@@ -50,7 +50,7 @@ const bot = new TelegramBotAPI('HERE_GOES_YOUR_TOKEN');
 })();
 ```
 
-The only error that is handled automatically by the library itself is flood control. If the server response contains the `retry_after` field, the method will not throw an error, but will automatically repeat the request after the specified time. To disable this behavior, pass `false` as the second argument to the method being called.
+The only error that is handled automatically by the library itself is flood control. If the server response contains the `retry_after` field, the method will not throw an error, but will automatically repeat the request after the specified time. By default, 10 retries are made to complete the request. To change this limit, pass it as the second argument to the called method. To disable this behavior, pass `0` or `false`. To retry an unlimited number of times, pass `Infinity` or `true`.
 
 Please note: the library does not have a built-in list of methods; you can try to call non-existent API methods (which will probably return an error).
 

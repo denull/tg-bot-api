@@ -32,7 +32,7 @@ class TelegramBotAPI {
     });
   }
 
-  async callMethod(method, params = {}, autoRetry = true) {
+  async callMethod(method, params = {}, retryAttempts = 10) {
     let formData = null;
     for (let k in params) {
       // Node now has way too many file-like data structures
@@ -82,9 +82,9 @@ class TelegramBotAPI {
 
     const data = await response.json();
     if (!data.ok) {
-      if (autoRetry && data.retry_after) { // Retry automatically, if allowed
+      if (retryAttempts && data.retry_after) { // Retry automatically, if allowed
         await delay(data.retry_after * 1000);
-        return this.callMethod(method, params);
+        return this.callMethod(method, params, retryAttempts === true ? true : (retryAttempts - 1));
       }
       throw data;
     }
