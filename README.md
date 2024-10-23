@@ -2,7 +2,7 @@
 
 **English** | [Russian](README-ru.md)
 
-This is a concise library for [Telegram Bot API](https://core.telegram.org/bots/api). Unlike most other libraries, this implementation is not overloaded with unnecessary details and solves only one problem: convenient execution of requests to the API. The library has no external dependencies, it consists of 1 file less than 100 lines long and does not require updates when new methods appear.
+This is a concise library for [Telegram Bot API](https://core.telegram.org/bots/api). Unlike most other libraries, this implementation is not overloaded with unnecessary details and solves only one problem: convenient execution of requests to the API. The library has no external dependencies, it consists of 1 file about 100 lines long and does not require updates when new methods appear.
 
 This is **not** a framework. The library does not offer ways to handle incoming events: this can be trivially solved by any web framework (for example, [Express](https://expressjs.com/)). To call methods, you do not need to consult the library documentation: you always pass an object with the fields that are specified in the official documentation of the [Telegram Bot API](https://core.telegram.org/bots/api).
 
@@ -32,7 +32,7 @@ Use the `{token}` and `{method}` templates inside a URL to substitute the token 
 
 ## Making API requests
 
-To call API methods, simply call them on the created `TelegramBotAPI` instance. All parameters are specified as fields of the object passed as the first argument. The methods return a `Promise`, which is either resolved by the contents of the `result` field from the API response (if the call was successful), or throws the error returned from the API (with the `error_code` and `description` fields). For a list of methods, their parameters and error codes, see the [official documentation](https://core.telegram.org/bots/api).
+To call API methods, simply call them on the created `TelegramBotAPI` instance. All parameters are specified as fields of the object passed as the first argument. The methods return a `Promise`, which is either resolved by the contents of the `result` field from the API response (if the call was successful), or throws the error returned from the API (see below for details). For a list of methods, their parameters and error codes, see the [official documentation](https://core.telegram.org/bots/api).
 
 ```js
 const TelegramBotAPI = require('tg-bot-api');
@@ -50,9 +50,18 @@ const bot = new TelegramBotAPI('HERE_GOES_YOUR_TOKEN');
 })();
 ```
 
-The only error that is handled automatically by the library itself is flood control. If the server response contains the `retry_after` field, the method will not throw an error, but will automatically repeat the request after the specified time. By default, 10 retries are made to complete the request. To change this limit, pass it as the second argument to the called method. To disable this behavior, pass `0` or `false`. To retry an unlimited number of times, pass `Infinity` or `true`.
+**Please note**: the library does not have a built-in list of methods; you can try to call non-existent API methods (which will probably return an error).
 
-Please note: the library does not have a built-in list of methods; you can try to call non-existent API methods (which will probably return an error).
+## Handling errors
+
+The errors thrown are instances of the `TelegramBotAPI.TelegramError` class (which inherits from `Error`). It contains the following fields:
+
+- `message`: text description of the error, corresponds to the `description` field in the server response;
+- `code`: numeric error code, corresponds to the `error_code` field in the server response;
+- `parameters`: additional [error parameters](https://core.telegram.org/bots/api#responseparameters) returned by the server;
+- `request`: an object with the fields `method`, `params`, `attempt` and `retryAttempts`, describing the request that caused the error (`attempt` is the attempt number, starting from 0).
+
+The only error that is handled automatically by the library itself is flood control. If the server response contains the `retry_after` field, the method will not throw an error, but will automatically repeat the request after the specified time. By default, 10 retries are made to complete the request. To change this limit, pass it as the second argument to the called method. To disable this behavior, pass `0` or `false`. To retry an unlimited number of times, pass `Infinity` or `true`.
 
 ## Sending files
 
