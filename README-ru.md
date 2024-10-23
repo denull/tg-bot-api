@@ -17,7 +17,7 @@ npm install tg-bot-api
 Библиотека экспортирует класс `TelegramBotAPI`. Для работы с API создайте его экземпляр, передав токен вашего бота:
 
 ```js
-const TelegramBotAPI = require('tg-bot-api');
+const TelegramBotAPI = require('@denull/tg-bot-api');
 
 // Замените HERE_GOES_YOUR_TOKEN на токен, полученный от @BotFather
 const bot = new TelegramBotAPI('HERE_GOES_YOUR_TOKEN');
@@ -35,7 +35,7 @@ const bot = new TelegramBotAPI('HERE_GOES_YOUR_TOKEN', 'https://bots.mn/bot{toke
 Для обращения к методам API просто вызывайте их на созданном экземпляре `TelegramBotAPI`. Все параметры указываются в виде полей объекта, переданного первым аргументом. Методы возвращают `Promise`, который либо резолвится содержимым поля `result` из ответа API (если вызов завершился успешно), либо выбрасывает возвращённую от API ошибку (подробнее см. ниже). Список методов, их параметров и кодов ошибок смотрите в [официальной документации](https://core.telegram.org/bots/api).
 
 ```js
-const TelegramBotAPI = require('tg-bot-api');
+const TelegramBotAPI = require('@denull/tg-bot-api');
 const bot = new TelegramBotAPI('HERE_GOES_YOUR_TOKEN');
 
 (async () => {
@@ -69,7 +69,7 @@ const bot = new TelegramBotAPI('HERE_GOES_YOUR_TOKEN');
 
 ```js
 const fs = require('fs');
-const TelegramBotAPI = require('tg-bot-api');
+const TelegramBotAPI = require('@denull/tg-bot-api');
 const bot = new TelegramBotAPI('HERE_GOES_YOUR_TOKEN');
 
 (async () => {

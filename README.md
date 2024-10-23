@@ -17,7 +17,7 @@ npm install @denull/tg-bot-api
 The library exports the `TelegramBotAPI` class. To work with the API, create an instance of it by passing your bot's token:
 
 ```js
-const TelegramBotAPI = require('tg-bot-api');
+const TelegramBotAPI = require('@denull/tg-bot-api');
 
 // Replace HERE_GOES_YOUR_TOKEN with the token received from @BotFather
 const bot = new TelegramBotAPI('HERE_GOES_YOUR_TOKEN');
@@ -35,7 +35,7 @@ Use the `{token}` and `{method}` templates inside a URL to substitute the token 
 To call API methods, simply call them on the created `TelegramBotAPI` instance. All parameters are specified as fields of the object passed as the first argument. The methods return a `Promise`, which is either resolved by the contents of the `result` field from the API response (if the call was successful), or throws the error returned from the API (see below for details). For a list of methods, their parameters and error codes, see the [official documentation](https://core.telegram.org/bots/api).
 
 ```js
-const TelegramBotAPI = require('tg-bot-api');
+const TelegramBotAPI = require('@denull/tg-bot-api');
 const bot = new TelegramBotAPI('HERE_GOES_YOUR_TOKEN');
 
 (async() => {
@@ -69,7 +69,7 @@ The main nuance that arises when working with the Telegram Bot API is the featur
 
 ```js
 const fs = require('fs');
-const TelegramBotAPI = require('tg-bot-api');
+const TelegramBotAPI = require('@denull/tg-bot-api');
 const bot = new TelegramBotAPI('HERE_GOES_YOUR_TOKEN');
 
 (async() => {
