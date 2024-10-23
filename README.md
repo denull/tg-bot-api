@@ -63,6 +63,8 @@ The errors thrown are instances of the `TelegramBotAPI.TelegramError` class (whi
 
 The only error that is handled automatically by the library itself is flood control. If the server response contains the `retry_after` field, the method will not throw an error, but will automatically repeat the request after the specified time. By default, 10 retries are made to complete the request. To change this limit, pass it as the second argument to the called method. To disable this behavior, pass `0` or `false`. To retry an unlimited number of times, pass `Infinity` or `true`.
 
+To handle errors in API responses globally (e.g. for logging), set your handler function in the `onError` field on your `TelegramBotAPI` instance. It will be called before each error is thrown with a single argument — the error itself.
+
 ## Sending files
 
 The main nuance that arises when working with the Telegram Bot API is the features of sending files. The library automatically switches from `application/json` format to `multipart/form-data` if one of the fields passed is of type `Blob`, `File`, `Stream`, `Buffer`, `ArrayBuffer`, `TypedArray` or `DataView`:
@@ -103,7 +105,7 @@ There are several ways to specify these values. The most “canonical” way is 
 const file = new File([buffer], 'AnotherImage.jpg', { type: 'image/jpeg' });
 ```
 
-The second way is to specify these values ​​in the `name` and `type` fields directly on the loaded object. Additionally, if your `Stream` class contains a `path` field, the filename will be extracted from its path.
+The second way is to specify these values ​​in the `name` and `type` fields directly on the loaded object. Additionally, if an instance of `Stream` class contains a `path` field, the filename will be extracted from its path.
 
 Finally, you can define these values ​​"next to" the downloaded file like this:
 

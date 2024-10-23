@@ -102,7 +102,9 @@ class TelegramBotAPI {
         return data.result;
       }
     } catch (cause) { // Re-throw with additional information
-      throw cause instanceof TelegramError ? cause : new TelegramError({ method, params, attempt, retryAttempts }, { cause });
+      const error = cause instanceof TelegramError ? cause : new TelegramError({ method, params, attempt, retryAttempts }, { cause });
+      this.onError && this.onError(error);
+      throw error;
     }
   }
 }
