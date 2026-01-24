@@ -126,6 +126,58 @@ class TelegramBotAPI {
       throw error;
     }
   }
+
+  computeInitDataHash(data) {
+    const keys = Object.keys(data);
+    keys.sort();
+    const list = [];
+    for (let key of keys) {
+      list.push(`${key}=${data[key]}`);
+    }
+    const secretKey = crypto.createHmac('sha256', 'WebAppData').update(this.token).digest();
+    return crypto.createHmac('sha256', secretKey).update(list.join('\n')).digest('hex');
+  }
+
+  signInitData(data) {
+    const raw = Object.fromEntries(Object.keys(data).map(key => [key, typeof data[key] == 'object' ? JSON.stringify(data[key]) : data[key]]));
+    raw.auth_data = Math.floor(Date.now() / 1000);
+    return Object.keys(raw).map(key => `${key}=${encodeURIComponent(raw[key])}`).join('&') +
+      '&hash=' + this.computeInitDataHash(raw);
+  }
+
+  verifyInitData(initData, maxAge = 2592000) {
+    if (typeof initData != 'string') {
+      return null;
+    }
+    const data = {};
+    const raw = {};
+    let hash;
+    try {
+      for (let line of initData.split('&')) {
+        const pair = line.split('=');
+        if (pair.length == 2) {
+          const key = decodeURIComponent(pair[0]);
+          const value = decodeURIComponent(pair[1]);
+          if (key == 'hash') {
+            hash = value;
+          } else {
+            raw[key] = value;
+            data[key] = ['user', 'receiver', 'chat'].includes(key) ?
+              JSON.parse(value) : ['can_send_after', 'auth_date'].includes(key) ? parseInt(value) : value;
+          }
+        }
+      }
+    } catch (error) {
+      return null;
+    }
+    if (hash != this.computeInitDataHash(raw)) {
+      return null;
+    }
+    if (data.auth_date && maxAge && ((Date.now() / 1000) - data.auth_date > maxAge)) {
+      return null;
+    }
+    return data;
+  }
 }
 
 module.exports = TelegramBotAPI;

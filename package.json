@@ -1,6 +1,6 @@
 {
   "name": "@denull/tg-bot-api",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "A tiny, unopinionated, 0-dependency library for interacting with Telegram Bot API",
   "main": "index.js",
   "scripts": {

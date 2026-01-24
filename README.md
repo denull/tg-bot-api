@@ -119,3 +119,11 @@ const message = await bot.sendDocument({
 ```
 
 The names of the fields with this meta information are formed from the name of the field with the file itself by adding the suffixes `$name` and `$type`.
+
+## Validating initData for Mini Apps
+
+For your convenience when developing Telegram Mini Apps, there is a method `verifyInitData`. It accepts a string value of the `initData` field as its argument (see [Mini Apps documentation](https://core.telegram.org/bots/webapps#initializing-mini-apps)), and validates its hash for correctness. If have is valid, this method returns the decoded object, otherwise it returns `null`. You can pass the maximum allowed validity period as the second argument (30 days by default; pass `Infinity` or any falsy value to disable the age check).
+
+There are also two auxiliary methods (usually you shouldn't use them directly):
+* `computeInitDataHash` — compute the valid hash based on `initData` object;
+* `signInitData` — convert object to string and sign with the correct hash (can be useful for testing).
