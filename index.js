@@ -2,6 +2,7 @@ const { basename } = require('node:path');
 const { Readable } = require('node:stream');
 const { Blob, File } = require('node:buffer');
 const { isTypedArray } = require('node:util/types');
+const { createHmac } = require('node:crypto');
 
 function streamToFile(stream, name, type) {
   return new Promise((resolve, reject) => {
@@ -134,8 +135,8 @@ class TelegramBotAPI {
     for (let key of keys) {
       list.push(`${key}=${data[key]}`);
     }
-    const secretKey = crypto.createHmac('sha256', 'WebAppData').update(this.token).digest();
-    return crypto.createHmac('sha256', secretKey).update(list.join('\n')).digest('hex');
+    const secretKey = createHmac('sha256', 'WebAppData').update(this.token).digest();
+    return createHmac('sha256', secretKey).update(list.join('\n')).digest('hex');
   }
 
   signInitData(data) {
